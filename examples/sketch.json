@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "nodes": [
+    { "id": "start", "type": "start", "position": { "x": 0, "y": 150 }, "data": { "name": "Start", "inputs": ["a", "b"] } },
+    { "id": "s1", "type": "script", "position": { "x": 180, "y": 10 }, "data": { "name": "Add", "code": "// Both branches run in parallel; this one is slow on purpose.\nawait new Promise((r) => setTimeout(r, 600))\nreturn { c: a + b }", "timeoutMs": 5000 } },
+    { "id": "d1", "type": "decision", "position": { "x": 220, "y": 250 }, "data": { "name": "a > b?", "expr": "a > b" } },
+    { "id": "s2", "type": "script", "position": { "x": 470, "y": 125 }, "data": { "name": "Double", "code": "console.log('c is', c)\nreturn { d: c * 2 }", "timeoutMs": 5000 } },
+    { "id": "end", "type": "end", "position": { "x": 730, "y": 150 }, "data": { "name": "End" } }
+  ],
+  "edges": [
+    { "id": "e1", "source": "start", "target": "s1" },
+    { "id": "e2", "source": "start", "target": "d1" },
+    { "id": "e3", "source": "s1", "target": "s2" },
+    { "id": "e4", "source": "d1", "sourceHandle": "true", "target": "s2" },
+    { "id": "e5", "source": "d1", "sourceHandle": "false", "target": "end" },
+    { "id": "e6", "source": "s2", "target": "end" }
+  ],
+  "lastInputs": { "a": "5", "b": "2" }
+}
